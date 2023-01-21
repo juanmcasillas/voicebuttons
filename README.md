@@ -1,6 +1,7 @@
 # VoiceButtons
 
-Map joystick buttons to voice messages, using the text-to-speech api of windows 10. Create a talk-able interface to say what you want when pushes Joystick Buttons. Started to map BL-Radio mode buttons, but ended to map DCS planes radio configurations, using LUA. The socket is a *broadcast UDP socket* with Address: `127.0.0.1` and port `64998`
+Map joystick buttons to voice messages, using the text-to-speech api of windows 10. Create a talk-able interface to say what you want when pushes Joystick Buttons. Started to map BL-Radio mode buttons, but ended to map DCS planes radio configurations, using LUA. The socket is a *broadcast UDP socket* with Address: `127.0.0.1` and port `64998`. This tool has been 
+developed to work with [BL-Radio](https://github.com/juanmcasillas/BLButtons/blob/master/RADIO.md) a custom-made gamepad to interface with DCS radios.
 
 ## Required modules:
 
