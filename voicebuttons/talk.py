@@ -20,13 +20,16 @@ from time import sleep
 
 import re
 import socket
+
 from time import sleep
 import json
 from types import SimpleNamespace
 from datetime import datetime
+import threading
 
 from .output import OutputManager
 from .config import CONFIG
+from .gui import *
 
 class TalkClass:
     DAVID = 'DAVID'
@@ -211,17 +214,29 @@ class VoiceButtonsClass:
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
+        self.sock.settimeout(CONFIG().delay)
         self.sock.bind((CONFIG().addr, CONFIG().port))
 
         event_loop = pyglet.app.EventLoop()
 
         pyglet.clock.schedule_interval(self.run_server, CONFIG().delay)
+
+        if CONFIG().gui:
+            self.gui = VoiceButtonApp(False)
+            pyglet.clock.schedule_interval(self.gui.do_the_work, CONFIG().delay)
+
+
         self.current_mod = None
         event_loop.run()
 
     def run_server(self, value):
 
-            data, addr = self.sock.recvfrom(1024)
+            try:
+                data, addr = self.sock.recvfrom(1024)
+            except socket.timeout:
+                return
+
+
             try:
                 msg = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
             except Exception as e:
@@ -285,9 +300,10 @@ class VoiceButtonsClass:
 
 
     def run(self):
+        if CONFIG().gui:
+            self.gui = VoiceButtonApp(False)
+            pyglet.clock.schedule_interval(self.gui.do_the_work, CONFIG().delay)
+
         event_loop = pyglet.app.EventLoop()
         event_loop.run()
-
-        
-
             

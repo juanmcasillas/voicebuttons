@@ -1,0 +1,22 @@
+{
+    "voice": "ZIRA",
+    "delay": 0.1,
+    "devices": [
+        { 
+            "name": "R6 Pedals",
+            "commands": [
+                {  
+                    "name": "Button 19",
+                    "msg" : "Eject",
+                    "on"  : "press"
+                },
+                {  
+                    "name": "Button 13",
+                    "msg" : "It's $time",
+                    "on"  : "press"
+                }
+            ]
+        }
+    ]
+}
+

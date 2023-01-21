@@ -2,10 +2,12 @@
 # -*- coding: utf-8 -*-
 # ############################################################################
 #
-# voicebuttons.py
+# voicebuttons_guy_dcs.py
 # 11/01/2023 (c) Juan M. Casillas <juanm.casillas@gmail.com>
 #
 # read a config file, talk when a button is pressed, or released.
+# by default, starts as DCS server with the config. Used to generate the
+# binary.
 #
 # ############################################################################
 
@@ -23,12 +25,12 @@ warnings.filterwarnings("ignore")
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("-v", "--verbose", help="Show data about file and processing (Debug)", action="count", default=0)
-    parser.add_argument("-c", "--config", help="reads the configuration from <config>", default="config/config.json")
+    parser.add_argument("-v", "--verbose", help="Show data about file and processing (Debug)", action="count", default=3)
+    parser.add_argument("-c", "--config", help="reads the configuration from <config>", default="config/config_dcs.json")
     parser.add_argument("-l", "--list", help="show available USB devices", action="store_true")
-    parser.add_argument("-d", "--dcs", help="start reading form DCS (set default config to config/config_dcs.json)", action="store_true")
+    parser.add_argument("-d", "--dcs", help="start reading form DCS (set default config to config/config_dcs.json)", action="store_true", default="true")
     parser.add_argument("-o", "--logfile", help="Outputs to the defined file. Default = 'stdout'", default=sys.stdout)
-    parser.add_argument("-g", "--gui", help="Start minimized as traybar", action="store_true")
+    parser.add_argument("-g", "--gui", help="Start minimized as traybar", action="store_true", default="true")
 
     args = parser.parse_args()
 

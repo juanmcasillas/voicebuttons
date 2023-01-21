@@ -45,6 +45,7 @@ class ConfigClassDCS:
         
         # options set by config_set()
         self.verbose = 0
+        self.gui = False
         self.config_dir = None
         self.config_file = None
 

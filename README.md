@@ -48,7 +48,7 @@ The `.lua` code is an adaptation of `winwing` export `lua` code for their device
 
 ## Install on DCS.
 
-Add to ``DRIVE:\users\%USERNAME%\Saved Games\DCS\Scripts\Export.lua` this line:
+Add to `DRIVE:\users\%USERNAME%\Saved Games\DCS\Scripts\Export.lua` this line:
 
 ```lua
 -- my code to export my current plane data on the socket
