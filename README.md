@@ -50,7 +50,7 @@ The `.lua` code is an adaptation of `winwing` export `lua` code for their device
 
 Add to ``DRIVE:\users\%USERNAME%\Saved Games\DCS\Scripts\Export.lua` this line:
 
-```json
+```lua
 -- my code to export my current plane data on the socket
 local voiceblfs=require('lfs'); dofile(voiceblfs.writedir()..[[Scripts\voicebuttons\voicebuttonsExport.lua]])
 ```
