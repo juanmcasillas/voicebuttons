@@ -42,7 +42,7 @@
                     "commands": [
                         {  
                             "name": "Button 13",
-                            "msg" : "{time}",
+                            "msg" : "$time",
                             "on"  : "press"
                         }
                     ]
