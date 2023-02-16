@@ -11,7 +11,7 @@
                     "on"  : "press"
                 },
                 {  
-                    "name": "Button 13",
+                    "name": "Key e",
                     "msg" : "It's $time",
                     "on"  : "press"
                 }

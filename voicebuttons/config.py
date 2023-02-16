@@ -19,9 +19,10 @@ import os.path
 
 class ConfigClass:
     "must match exactly the json file"
-    def __init__(self, devices, voice="ZIRA"):
+    def __init__(self, devices, voice="ZIRA", delay=0.1):
         self.voice = voice
         self.devices = devices
+        self.delay = delay
 
         # options set by config_set()
         self.verbose = 0

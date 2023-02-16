@@ -42,6 +42,9 @@ class TalkClass:
 
     def __init__(self):
         self.speaker = win32com.client.Dispatch("SAPI.SpVoice")
+        # get voices
+        # vcs = self.speaker.GetVoices()
+        # print(vcs.Item (1) .GetAttribute ("Name")) 
         pass
 
     def set_voice(self, voice):
@@ -49,8 +52,8 @@ class TalkClass:
         self.speaker.Voice      # this line IS REQUIRED in order to work (maybe to init the interface)
         self.speaker.SetVoice(vcs.Item(TalkClass.voices[voice]))
 
-    def speak(self, text):
-        flags = 1 
+    def speak(self, text, async_mode=True):
+        # flags = 1 
         # https://learn.microsoft.com/en-us/previous-versions/windows/desktop/ms720892(v=vs.85)
         # 'SpVoice Flags
         # SVSFDefault = 0
@@ -75,6 +78,8 @@ class TalkClass:
         # SVSFVoiceMask = 127
         # SVSFUnusedFlags = -128
         flags = 1 | 2   # SVSFlagsAsync | SVSFPurgeBeforeSpeak 
+        if not async_mode:
+            flags = 0
         self.speaker.Speak(text, flags)
 
 
@@ -83,8 +88,8 @@ class TalkClass:
 
 
 def map_control(device_name, control, onevent, msg, button, values, talk, parent):
-    if isinstance(control, pyglet.input.base.Button):
 
+    if isinstance(control, pyglet.input.base.Button):
         if onevent == "press":
             @control.event
             def on_press():
@@ -106,7 +111,6 @@ def map_control(device_name, control, onevent, msg, button, values, talk, parent
 
         
         if onevent == "toggle":
-
             @control.event
             def on_press():
                 state = parent.devices[device_name]['state'][button]
@@ -118,6 +122,7 @@ def map_control(device_name, control, onevent, msg, button, values, talk, parent
                 talk.speak(msg_l)
                 if CONFIG().verbose > 2:
                     OutputManager.log('%s: %s.on_press() [%s] <toggle>' % (device_name, button, msg_l))
+                    
 
 
 class VoiceButtonsClass:
@@ -129,6 +134,11 @@ class VoiceButtonsClass:
         self.current_mod = None
         self.mods = {}
         self.mod_default = None
+
+    def say_text(self, text):
+        if CONFIG().verbose > 1:
+            print("saying: '%s' (sync mode)" % text)
+        self.talk.speak(text, async_mode=False)
 
     def add_device(self, device_name, commands):
 
@@ -153,6 +163,7 @@ class VoiceButtonsClass:
 
             for command in commands:
 
+                # buttons
                 regex = re.compile("^Button (\d+)$")
 
                 onevent = command["on"].lower()
@@ -175,8 +186,32 @@ class VoiceButtonsClass:
                         map_control(device_name, control, onevent, text, full_name, values, self.talk, self)
                         if CONFIG().verbose > 1:
                             OutputManager.log("%s Mapped %s on '%s' (event: %s) msg: %s" % (device_name,command["name"], control.raw_name, onevent, msg))
-             
+                        continue
+                
+                # keys
+                regex = re.compile("^Key (\s+)$")
 
+                onevent = command["on"].lower()
+                msg = command["msg"]
+                values = command["values"] if "values" in command else []
+
+                regdata = regex.match(control.raw_name)
+
+                if regdata:
+                    key = regdata.groups(1)[0]
+                    full_name = "Key %s" % (key)
+                       
+                    if full_name == command["name"]:
+                            
+                        self.devices[device_name]['state'][full_name] = False
+                        if onevent in ["press", "release"]:
+                            text = msg.format(button=key, on=onevent)
+                        else:
+                            text = msg
+                        map_control(device_name, control, onevent, text, full_name, values, self.talk, self)
+                        if CONFIG().verbose > 1:
+                            OutputManager.log("%s Mapped %s on '%s' (event: %s) msg: %s" % (device_name,command["name"], control.raw_name, onevent, msg))
+                        continue
                     
     def list_devices(self):
 

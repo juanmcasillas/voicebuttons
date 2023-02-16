@@ -29,7 +29,7 @@ if __name__ == "__main__":
     parser.add_argument("-d", "--dcs", help="start reading form DCS (set default config to config/config_dcs.json)", action="store_true")
     parser.add_argument("-o", "--logfile", help="Outputs to the defined file. Default = 'stdout'", default=sys.stdout)
     parser.add_argument("-g", "--gui", help="Start minimized as traybar", action="store_true")
-
+    parser.add_argument("-t", "--test", help="Talk a sample test")
     args = parser.parse_args()
 
     mode = "default"
@@ -48,7 +48,11 @@ if __name__ == "__main__":
 
 
     manager = VoiceButtonsClass(CONFIG().voice,mode)
-    
+
+    if args.test:
+        manager.say_text(args.test)
+        sys.exit(0)
+
     if args.list:
         manager.list_devices()
         sys.exit(0)
